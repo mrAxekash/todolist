@@ -1,5 +1,9 @@
 import * as React from 'react';
 import {ChangeEvent, KeyboardEvent, useState} from "react";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import IconButton from "@mui/material/IconButton/IconButton";
+import {AddBox} from "@mui/icons-material";
 
 type Props = {
     callback: (title: string) => void
@@ -35,18 +39,18 @@ export const AddItemForm = (props: Props) => {
 
     return (
         <div>
-            <input
+            <TextField
+                error={!!error}
+                variant="outlined"
                 onChange={onChangeHandler}
                 value={title}
                 onKeyDown={onKeyDownHandler}
-                className={error ? 'error' : ''}
+                label={'Title'}
+                helperText={error}
             />
-            <button
-                onClick={addItem}
-            >
-                +
-            </button>
-            {error && <div className={'errorText'}> {error} </div>}
+            <IconButton color={'primary'} onClick={addItem}  >
+                <AddBox />
+            </IconButton>
         </div>
     );
 };

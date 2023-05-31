@@ -100,7 +100,7 @@ function App() {
                                         key={todolist.id}
                                         id={todolist.id}
                                         title={todolist.title}
-                                        tasks={taskForTodolist}
+                                        //tasks={taskForTodolist}
                                         filter={todolist.filter}
                                         changeFilter={changeFilter}
                                         addTask={addTask}

@@ -1,7 +1,6 @@
-import React from 'react'
 import {FilteredValuesType} from "../App";
 import {v1} from "uuid";
-import { TodolistsType } from '../AppWithReducers';
+import {TodolistsType} from '../AppWithReducers';
 
 type ActionType =
     RemoveTodolistActionType

@@ -8,7 +8,8 @@ import {AddBox} from "@mui/icons-material";
 type Props = {
     callback: (title: string) => void
 };
-export const AddItemForm = (props: Props) => {
+export const AddItemForm = React.memo( (props: Props) => {
+    console.log('add item form here')
 
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
@@ -19,7 +20,9 @@ export const AddItemForm = (props: Props) => {
     }
 
     const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
+        if(error !== null) {
+            setError(null)
+        }
         if(e.key === 'Enter') {
             props.callback(title)
             setTitle('')
@@ -53,4 +56,4 @@ export const AddItemForm = (props: Props) => {
             </IconButton>
         </div>
     );
-};
+});

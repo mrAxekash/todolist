@@ -1,6 +1,7 @@
 import React from 'react'
-import {FilteredValuesType, TodolistsType} from "../App";
+import {FilteredValuesType} from "../App";
 import {v1} from "uuid";
+import { TodolistsType } from '../AppWithReducers';
 
 type ActionType =
     RemoveTodolistActionType
@@ -45,14 +46,14 @@ export const addTodolistAC = (title: string) => {
     } as const
 }
 
-export const changeTodolistTitle = (id: string, title: string) => {
+export const changeTodolistTitleAC = (id: string, title: string) => {
     return {
         type: 'CHANGE-TODOLIST-TITLE',
         id, title
     } as const
 }
 
-export const changeTodolistFilter = (id: string, filter: FilteredValuesType) => {
+export const changeTodolistFilterAC = (id: string, filter: FilteredValuesType) => {
     return {
         type: 'CHANGE-TODOLIST-FILTER',
         id,
@@ -61,13 +62,13 @@ export const changeTodolistFilter = (id: string, filter: FilteredValuesType) => 
 }
 
 
-export const todolistsReducer = (state: Array<TodolistsType>, action: ActionType) => {
+export const todolistsReducer = (state: Array<TodolistsType>, action: ActionType): Array<TodolistsType> => {
     switch (action.type) {
         case 'REMOVE-TODOLIST': {
             return state.filter(todo => todo.id !== action.id)
         }
         case 'ADD-TODOLIST': {
-            const newTask = {id: action.todolistID, title: action.title, filter: 'all'}
+            const newTask: TodolistsType = {id: action.todolistID, title: action.title, filter: 'all'}
             return [...state, newTask]
         }
         case 'CHANGE-TODOLIST-TITLE': {

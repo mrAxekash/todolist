@@ -53,8 +53,8 @@ export const Todolist = (props: Props) => {
         <div>
             <h3>
                 <EditableSpan value={props.title} callback={changeTodolistTitle}/>
-                <IconButton aria-label="delete">
-                    <DeleteIcon onClick={deleteTodolist}/>
+                <IconButton aria-label="delete" onClick={deleteTodolist}>
+                    <DeleteIcon />
                 </IconButton>
             </h3>
             <AddItemForm callback={addTask}/>
@@ -77,8 +77,8 @@ export const Todolist = (props: Props) => {
                         <Checkbox checked={task.isDone} onChange={onChangeHandler} />
                         <EditableSpan value={task.title} callback={changeTaskTitle}/>
 
-                        {<IconButton aria-label="delete" size={'small'}>
-                            <DeleteIcon onClick={onClickHandler} fontSize={'small'} />
+                        {<IconButton aria-label="delete" size={'small'} onClick={onClickHandler} >
+                            <DeleteIcon fontSize={'small'} />
                         </IconButton>}
                     </div>
                 })}

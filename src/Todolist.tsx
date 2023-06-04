@@ -37,10 +37,10 @@ export const Todolist = React.memo((props: Props) => {
     let tasks = stateTasks
 
     if (props.filter === 'active') {
-        tasks = stateTasks.filter(task => task.status !== 0)
+        tasks = stateTasks.filter(task => task.status === 0)
     }
     if (props.filter === 'completed') {
-        tasks = stateTasks.filter(task => task.status === 1)
+        tasks = stateTasks.filter(task => task.status === 2)
     }
 
     const addTask = useCallback((title: string) => {

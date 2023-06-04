@@ -1,33 +1,30 @@
 import {FilteredValuesType} from "../App";
-import {v1} from "uuid";
-import {TodolistsType} from '../AppWithReducers';
+import {todolistsAPI, TodolistType} from "../api/todolist-api";
+import {Dispatch} from "redux";
+
+//types
+
+export type TodolistsType = TodolistType & {
+    filter: FilteredValuesType
+}
 
 type ActionType =
     RemoveTodolistActionType
     | AddTodolistActionType
     | ChangeTodolistTitleActionType
     | ChangeTodolistFilterActionType
+    | SetTodolistsActionType
 
-export type RemoveTodolistActionType = {
-    type: 'REMOVE-TODOLIST',
-    id: string
-}
 
-export type AddTodolistActionType = {
-    type: 'ADD-TODOLIST'
-    title: string
-    todolistID: string
-}
-type ChangeTodolistTitleActionType = {
-    type: 'CHANGE-TODOLIST-TITLE',
-    id: string
-    title: string
-}
-type ChangeTodolistFilterActionType = {
-    type: 'CHANGE-TODOLIST-FILTER'
-    id: string
-    filter: FilteredValuesType
-}
+export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>
+
+export type AddTodolistActionType = ReturnType<typeof addTodolistAC>
+
+type ChangeTodolistTitleActionType = ReturnType<typeof changeTodolistTitleAC>
+
+type ChangeTodolistFilterActionType = ReturnType<typeof changeTodolistFilterAC>
+
+export type SetTodolistsActionType = ReturnType<typeof setTodolistsAC>
 
 //action-creators
 
@@ -38,10 +35,10 @@ export const removeTodolistAC = (id: string) => {
     } as const
 }
 
-export const addTodolistAC = (title: string) => {
+export const addTodolistAC = (newTodolist: TodolistType) => {
     return {
         type: 'ADD-TODOLIST',
-        title, todolistID: v1()
+        newTodolist
     } as const
 }
 
@@ -60,7 +57,14 @@ export const changeTodolistFilterAC = (id: string, filter: FilteredValuesType) =
     } as const
 }
 
+export const setTodolistsAC = (data: TodolistType[]) => {
+    return {
+        type: 'SET-TODOLISTS',
+        data
+    } as const
+}
 
+//reducer
 const initialState: Array<TodolistsType> = []
 
 export const todolistsReducer = (state: Array<TodolistsType> = initialState, action: ActionType): Array<TodolistsType> => {
@@ -69,8 +73,7 @@ export const todolistsReducer = (state: Array<TodolistsType> = initialState, act
             return state.filter(todo => todo.id !== action.id)
         }
         case 'ADD-TODOLIST': {
-            const newTask: TodolistsType = {id: action.todolistID, title: action.title, filter: 'all'}
-            return [...state, newTask]
+            return [{...action.newTodolist, filter: 'all'}, ...state]
         }
         case 'CHANGE-TODOLIST-TITLE': {
             return state.map(todolist => todolist.id === action.id ? {...todolist, title: action.title} : todolist)
@@ -78,7 +81,43 @@ export const todolistsReducer = (state: Array<TodolistsType> = initialState, act
         case 'CHANGE-TODOLIST-FILTER': {
             return state.map(todo => todo.id === action.id ? {...todo, filter: action.filter} : todo)
         }
+        case "SET-TODOLISTS": {
+            return action.data.map(todo => {
+                return {...todo, filter: 'all'}
+            })
+        }
         default:
             return state
     }
 }
+
+//thunks
+
+export const fetchTodolistsTC = () => (dispatch: Dispatch) => {
+    todolistsAPI.getTodolists()
+        .then(res => {
+            dispatch(setTodolistsAC(res))
+        })
+}
+
+export const deleteTodolistTC = (todolistID: string) => (dispatch: Dispatch) => {
+    todolistsAPI.deleteTodolist(todolistID)
+        .then(res => {
+            dispatch(removeTodolistAC(todolistID))
+        })
+}
+
+export const addTodolistTC = (newTitle: string) => (dispatch: Dispatch) => {
+    todolistsAPI.addTodolist(newTitle)
+        .then(res => {
+            dispatch(addTodolistAC(res.data.item))
+        })
+}
+
+export const changeTodolistTitleTC = (todolistID: string, newTitle: string) => (dispatch: Dispatch) => {
+    todolistsAPI.updateTodolistTitle(newTitle, todolistID)
+        .then(res => {
+            dispatch(changeTodolistTitleAC(todolistID, newTitle))
+        })
+}
+

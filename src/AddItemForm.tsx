@@ -9,7 +9,6 @@ type Props = {
     callback: (title: string) => void
 };
 export const AddItemForm = React.memo( (props: Props) => {
-    console.log('add item form here')
 
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null>(null)

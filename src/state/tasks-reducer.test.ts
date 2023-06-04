@@ -1,20 +1,22 @@
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './tasks-reducer'
-import {TasksType, TodolistsType} from '../App'
-import {addTodolistAC, removeTodolistAC, todolistsReducer} from "./todolists-reducer";
+import {addTodolistAC, removeTodolistAC, todolistsReducer, TodolistsType} from "./todolists-reducer";
+import {TasksType} from "../AppWithRedux";
+import {TaskPriority, TaskStatuses, TaskType} from "../api/task-api";
+import {v1} from "uuid";
 
 let startState: TasksType
 
 beforeEach(() => {
     startState = {
         'todolistId1': [
-            {id: '1', title: 'CSS', isDone: false},
-            {id: '2', title: 'JS', isDone: true},
-            {id: '3', title: 'React', isDone: false}
+            {id: '1', title: 'CSS', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId1' },
+            {id: '2', title: 'JS', status: TaskStatuses.Completed, addedDate: `soon`, order: 1, completed: true, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId1' },
+            {id: '3', title: 'React', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId1' }
         ],
         'todolistId2': [
-            {id: '1', title: 'bread', isDone: false},
-            {id: '2', title: 'milk', isDone: true},
-            {id: '3', title: 'tea', isDone: false}
+            {id: '1', title: 'bread', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId2' },
+            {id: '2', title: 'milk', status: TaskStatuses.Completed, addedDate: `soon`, order: 1, completed: true, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId2' },
+            {id: '3', title: 'tea', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId1' }
         ]
     }
 })
@@ -40,7 +42,9 @@ test('correct task should be deleted from correct array', () => {
 
 test('correct task should be added to correct array', () => {
 
-    const action = addTaskAC('juce', 'todolistId2')
+    let newTask: TaskType = {id: v1(), title: 'juce', status: TaskStatuses.New, addedDate: `soon`, order: 2, todoListId: 'todolistId2', completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low}
+
+    const action = addTaskAC(newTask)
 
     const endState = tasksReducer(startState, action)
 
@@ -48,7 +52,7 @@ test('correct task should be added to correct array', () => {
     expect(endState['todolistId2'].length).toBe(4)
     expect(endState['todolistId2'][0].id).toBeDefined()
     expect(endState['todolistId2'][0].title).toBe('juce')
-    expect(endState['todolistId2'][0].isDone).toBe(false)
+    expect(endState['todolistId2'][0].status).toBe(0)
 })
 
 test('status of specified task should be changed', () => {
@@ -57,9 +61,9 @@ test('status of specified task should be changed', () => {
 
     const endState = tasksReducer(startState, action)
 
-    expect(endState['todolistId2'][1].isDone).toBe(false)
-    expect(endState['todolistId2'][0].isDone).toBe(false)
-    expect(endState['todolistId2'][2].isDone).toBe(false)
+    expect(endState['todolistId2'][1].status).toBe(0)
+    expect(endState['todolistId2'][0].status).toBe(0)
+    expect(endState['todolistId2'][2].status).toBe(0)
 })
 
 test('title of task should be changed', () => {
@@ -74,7 +78,9 @@ test('title of task should be changed', () => {
 })
 
 test('new array should be added when new todolist is added', () => {
-    const action = addTodolistAC('new todolist')
+
+    let newTodo: TodolistsType = {id: v1(), title: 'new todolist', filter: 'all', addedDate: `${new Date().getDate()}`, order: 3}
+    const action = addTodolistAC(newTodo)
 
     const endState = tasksReducer(startState, action)
 
@@ -93,7 +99,8 @@ test('ids should be equals', () => {
     const startTasksState: TasksType = {}
     const startTodolistsState: Array<TodolistsType> = []
 
-    const action = addTodolistAC('new todolist')
+    let newTodo: TodolistsType = {id: v1(), title: 'new todolist', filter: 'all', addedDate: `${new Date().getDate()}`, order: 3}
+    const action = addTodolistAC(newTodo)
 
     const endTasksState = tasksReducer(startTasksState, action)
     const endTodolistsState = todolistsReducer(startTodolistsState, action)
@@ -102,8 +109,8 @@ test('ids should be equals', () => {
     const idFromTasks = keys[0]
     const idFromTodolists = endTodolistsState[0].id
 
-    expect(idFromTasks).toBe(action.todolistID)
-    expect(idFromTodolists).toBe(action.todolistID)
+    expect(idFromTasks).toBe(action.newTodolist.id)
+    expect(idFromTodolists).toBe(action.newTodolist.id)
 })
 
 test('property with todolistId should be deleted', () => {

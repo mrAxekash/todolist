@@ -8,7 +8,6 @@ type Props = {
 };
 
 export const EditableSpan = React.memo((props: Props) => {
-    console.log('Editable span render')
 
     let [editMode, setEditMode] = useState(false)
     let [value, setValue] = useState(props.value)
@@ -21,7 +20,7 @@ export const EditableSpan = React.memo((props: Props) => {
     const activateViewMode = useCallback(() => {
         setEditMode(false)
         props.callback(value)
-    }, [props.callback, editMode])
+    }, [props.callback, editMode, value])
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value)

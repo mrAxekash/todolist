@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import './App.css';
-import {TaskType, Todolist} from "./Todolist";
+import {Todolist} from "./Todolist";
 import {v1} from "uuid";
 import {AddItemForm} from './AddItemForm';
 import {Header} from "./Header";
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Grid from "@mui/material/Grid";
+import {TaskPriority, TaskStatuses, TaskType} from './api/task-api';
 
 
 export type FilteredValuesType = 'all' | 'active' | 'completed'
@@ -33,13 +34,13 @@ function App() {
     ])
     let [tasks, setTasks] = useState<TasksType>({
         [todolistID1]: [
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'ReactJS', isDone: false},
+            {id: v1(), title: 'HTML&CSS', status: TaskStatuses.Completed, addedDate: `soon`, order: 1, completed: true, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: todolistID1 },
+            {id: v1(), title: 'JS', status: TaskStatuses.Completed, addedDate: `soon`, order: 1, completed: true, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: todolistID1 },
+            {id: v1(), title: 'ReactJS', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: todolistID1 },
         ],
         [todolistID2]: [
-            {id: v1(), title: 'Rest API', isDone: true},
-            {id: v1(), title: 'GraphQL', isDone: false},
+            {id: v1(), title: 'Rest API', status: TaskStatuses.Completed, addedDate: `soon`, order: 1, completed: true, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: todolistID2},
+            {id: v1(), title: 'GraphQL', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: todolistID2 },
         ]
     })
     //tasks function
@@ -47,11 +48,11 @@ function App() {
         setTasks({...tasks, [todolistID]: tasks[todolistID].filter(task => task.id !== taskId)})
     }
     const addTask = (newTaskTitle: string, todolistID: string) => {
-        let newTask: TaskType = {id: v1(), title: newTaskTitle, isDone: false}
+        let newTask: TaskType = {id: v1(), title: newTaskTitle, status: TaskStatuses.Completed, addedDate: `soon`, order: 1, completed: true, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: todolistID }
         setTasks({...tasks, [todolistID]: [newTask, ...tasks[todolistID]]})
     }
-    const changeTaskStatus = (taskId: string, isDone: boolean, todolistID: string) => {
-        setTasks({...tasks, [todolistID]: tasks[todolistID].map(task => task.id === taskId ? {...task, isDone} : task)})
+    const changeTaskStatus = (taskId: string, newStatus: TaskStatuses, todolistID: string) => {
+        setTasks({...tasks, [todolistID]: tasks[todolistID].map(task => task.id === taskId ? {...task, status: newStatus } : task)})
     }
     const changeTaskTitle = (todolistID: string, taskID: string, newTitle: string) => {
         setTasks({
@@ -88,10 +89,10 @@ function App() {
                     {todolists.map(todolist => {
                         let taskForTodolist = tasks[todolist.id]
                         if (todolist.filter === 'active') {
-                            taskForTodolist = taskForTodolist.filter(task => !task.isDone)
+                            taskForTodolist = taskForTodolist.filter(task => task.status === 0)
                         }
                         if (todolist.filter === 'completed') {
-                            taskForTodolist = taskForTodolist.filter(task => task.isDone)
+                            taskForTodolist = taskForTodolist.filter(task => task.status === 2)
                         }
                         return (
                             <Grid item>

@@ -7,6 +7,7 @@ import {AddBox} from "@mui/icons-material";
 
 type Props = {
     callback: (title: string) => void
+    disabled?: boolean
 };
 export const AddItemForm = React.memo( (props: Props) => {
 
@@ -37,8 +38,6 @@ export const AddItemForm = React.memo( (props: Props) => {
         }
     }
 
-
-
     return (
         <div>
             <TextField
@@ -49,8 +48,9 @@ export const AddItemForm = React.memo( (props: Props) => {
                 onKeyDown={onKeyDownHandler}
                 label={'Title'}
                 helperText={error}
+                disabled={props.disabled}
             />
-            <IconButton color={'primary'} onClick={addItem}  >
+            <IconButton color={'primary'} onClick={addItem} disabled={props.disabled} >
                 <AddBox />
             </IconButton>
         </div>

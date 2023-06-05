@@ -1,14 +1,14 @@
 import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {Todolist} from "./Todolist";
-import {AddItemForm} from './AddItemForm';
+import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import {Header} from "./Header";
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Grid from "@mui/material/Grid";
 import {
     addTaskTC,
-    changeTaskStatusAC, changeTaskTitleAndStatusTC,
+    changeTaskTitleAndStatusTC,
     deleteTaskTC,
 } from "./state/tasks-reducer";
 import {
@@ -20,6 +20,7 @@ import {
 import {useSelector} from "react-redux";
 import {AppRootStateType, useAppDispatch} from "./state/store";
 import {TaskStatuses, TaskType} from "./api/task-api";
+import {ErrorSnackbar} from "./components/ErrorSnackbar/ErrorSnackbar";
 
 
 export type FilteredValuesType = 'all' | 'active' | 'completed'
@@ -78,10 +79,11 @@ function AppWithRedux() {
 
     return (
         <div className="App">
+            <ErrorSnackbar />
             <Header/>
             <Container fixed>
                 <Grid container style={{padding: '20px'}}>
-                    <AddItemForm callback={addTodolist}/>
+                    <AddItemForm callback={addTodolist} />
                 </Grid>
 
                 <Grid container spacing={3}>
@@ -101,13 +103,13 @@ function AppWithRedux() {
                                         deleteTodolist={deleteTodolist}
                                         changeTaskTitle={changeTaskTitle}
                                         changeTodolistTitle={changeTodolistTitle}
+                                        entityStatus={todolist.entityStatus}
                                     />
                                 </Paper>
                             </Grid>
                         )
                     })}
                 </Grid>
-
             </Container>
 
         </div>

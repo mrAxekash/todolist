@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {Todolist} from "./Todolist";
 import {v1} from "uuid";
-import {AddItemForm} from './AddItemForm';
+import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import {Header} from "./Header";
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
@@ -101,7 +101,6 @@ function App() {
                                         key={todolist.id}
                                         id={todolist.id}
                                         title={todolist.title}
-                                        //tasks={taskForTodolist}
                                         filter={todolist.filter}
                                         changeFilter={changeFilter}
                                         addTask={addTask}
@@ -110,6 +109,7 @@ function App() {
                                         deleteTodolist={deleteTodolist}
                                         changeTaskTitle={changeTaskTitle}
                                         changeTodolistTitle={changeTodolistTitle}
+                                        entityStatus={'idle'}
                                     />
                                 </Paper>
                             </Grid>

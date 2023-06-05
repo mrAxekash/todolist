@@ -5,11 +5,17 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import {LinearProgress} from "@mui/material";
+import {useAppSelector} from "./state/store";
+import {InitialStateType, RequestStatusType} from "./state/app-reducer";
 
 type Props = {
 
 };
 export const Header = (props: Props) => {
+
+    const status = useAppSelector<RequestStatusType>(state => state.app.status)
+
     return (
         <AppBar position="static">
             <Toolbar>
@@ -25,6 +31,7 @@ export const Header = (props: Props) => {
                 </Typography>
                 <Button color="inherit">Login</Button>
             </Toolbar>
+            {status === 'loading' && <LinearProgress color={"secondary"}/>}
         </AppBar>
     );
 };

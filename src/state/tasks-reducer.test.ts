@@ -79,7 +79,7 @@ test('title of task should be changed', () => {
 
 test('new array should be added when new todolist is added', () => {
 
-    let newTodo: TodolistsType = {id: v1(), title: 'new todolist', filter: 'all', addedDate: `${new Date().getDate()}`, order: 3}
+    let newTodo: TodolistsType = {id: v1(), title: 'new todolist', filter: 'all', addedDate: `${new Date().getDate()}`, order: 3, entityStatus: 'idle'}
     const action = addTodolistAC(newTodo)
 
     const endState = tasksReducer(startState, action)
@@ -99,7 +99,7 @@ test('ids should be equals', () => {
     const startTasksState: TasksType = {}
     const startTodolistsState: Array<TodolistsType> = []
 
-    let newTodo: TodolistsType = {id: v1(), title: 'new todolist', filter: 'all', addedDate: `${new Date().getDate()}`, order: 3}
+    let newTodo: TodolistsType = {id: v1(), title: 'new todolist', filter: 'all', addedDate: `${new Date().getDate()}`, order: 3, entityStatus: 'idle'}
     const action = addTodolistAC(newTodo)
 
     const endTasksState = tasksReducer(startTasksState, action)

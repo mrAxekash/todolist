@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {FilteredValuesType} from "./App";
 import {useCallback, useEffect} from "react";
 import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import {EditableSpan} from './components/EditableSpan/EditableSpan';
@@ -9,9 +8,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {useSelector} from "react-redux";
 import {AppRootStateType, useAppDispatch} from "./state/store";
 import {Task} from "./Task";
-import {setTasksTC} from "./state/tasks-reducer";
+import {setTasksTC, TaskDomainType} from "./state/tasks-reducer";
 import {TaskStatuses, TaskType} from './api/task-api';
 import {RequestStatusType} from "./state/app-reducer";
+import {FilteredValuesType} from "./AppWithRedux";
 
 type Props = {
     id: string
@@ -28,7 +28,7 @@ type Props = {
 };
 export const Todolist = React.memo((props: Props) => {
 
-    let stateTasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[props.id])
+    let stateTasks = useSelector<AppRootStateType, Array<TaskDomainType>>(state => state.tasks[props.id])
     const dispatch = useAppDispatch()
 
 
@@ -68,7 +68,7 @@ export const Todolist = React.memo((props: Props) => {
     return (
         <div>
             <h3>
-                <EditableSpan value={props.title} callback={changeTodolistTitle}/>
+                <EditableSpan value={props.title} callback={changeTodolistTitle} disabled={props.entityStatus === 'loading'}/>
                 <IconButton aria-label="delete" onClick={deleteTodolist} disabled={props.entityStatus === 'loading'}>
                     <DeleteIcon/>
                 </IconButton>

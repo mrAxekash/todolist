@@ -1,7 +1,14 @@
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './tasks-reducer'
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    TaskDomainType,
+    tasksReducer
+} from './tasks-reducer'
 import {addTodolistAC, removeTodolistAC, todolistsReducer, TodolistsType} from "./todolists-reducer";
 import {TasksType} from "../AppWithRedux";
-import {TaskPriority, TaskStatuses, TaskType} from "../api/task-api";
+import {TaskPriority, TaskStatuses} from "../api/task-api";
 import {v1} from "uuid";
 
 let startState: TasksType
@@ -9,14 +16,14 @@ let startState: TasksType
 beforeEach(() => {
     startState = {
         'todolistId1': [
-            {id: '1', title: 'CSS', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId1' },
-            {id: '2', title: 'JS', status: TaskStatuses.Completed, addedDate: `soon`, order: 1, completed: true, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId1' },
-            {id: '3', title: 'React', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId1' }
+            {id: '1', title: 'CSS', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId1', entityStatus: 'idle' },
+            {id: '2', title: 'JS', status: TaskStatuses.Completed, addedDate: `soon`, order: 1, completed: true, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId1', entityStatus: 'idle' },
+            {id: '3', title: 'React', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId1', entityStatus: 'idle' }
         ],
         'todolistId2': [
-            {id: '1', title: 'bread', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId2' },
-            {id: '2', title: 'milk', status: TaskStatuses.Completed, addedDate: `soon`, order: 1, completed: true, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId2' },
-            {id: '3', title: 'tea', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId1' }
+            {id: '1', title: 'bread', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId2', entityStatus: 'idle' },
+            {id: '2', title: 'milk', status: TaskStatuses.Completed, addedDate: `soon`, order: 1, completed: true, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId2', entityStatus: 'idle' },
+            {id: '3', title: 'tea', status: TaskStatuses.New, addedDate: `soon`, order: 1, completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, todoListId: 'todolistId1', entityStatus: 'idle' }
         ]
     }
 })
@@ -42,7 +49,7 @@ test('correct task should be deleted from correct array', () => {
 
 test('correct task should be added to correct array', () => {
 
-    let newTask: TaskType = {id: v1(), title: 'juce', status: TaskStatuses.New, addedDate: `soon`, order: 2, todoListId: 'todolistId2', completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low}
+    let newTask: TaskDomainType = {id: v1(), title: 'juce', status: TaskStatuses.New, addedDate: `soon`, order: 2, todoListId: 'todolistId2', completed: false, deadline: 10, startDate: new Date().getDate(), description: '', priority: TaskPriority.Low, entityStatus: 'idle' }
 
     const action = addTaskAC(newTask)
 

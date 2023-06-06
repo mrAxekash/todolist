@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import {
     addTaskTC,
     changeTaskTitleAndStatusTC,
-    deleteTaskTC,
+    deleteTaskTC, TaskDomainType,
 } from "./state/tasks-reducer";
 import {
     addTodolistTC,
@@ -27,7 +27,7 @@ export type FilteredValuesType = 'all' | 'active' | 'completed'
 
 
 export type TasksType = {
-    [key: string]: Array<TaskType>
+    [key: string]: TaskDomainType[]
 }
 
 function AppWithRedux() {

@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 type Props = {
     value: string
     callback: (newTitle: string) => void
+    disabled: boolean
 };
 
 export const EditableSpan = React.memo((props: Props) => {
@@ -13,9 +14,13 @@ export const EditableSpan = React.memo((props: Props) => {
     let [value, setValue] = useState(props.value)
 
     const activateEditMode = useCallback(() => {
-        setEditMode(true)
-        setValue(props.value)
-    }, [props.value, editMode])
+        if(!props.disabled) {
+            setEditMode(true)
+            setValue(props.value)
+        } else {
+            setEditMode(false)
+        }
+    }, [props.value, editMode,props.disabled])
 
     const activateViewMode = useCallback(() => {
         setEditMode(false)
@@ -35,9 +40,13 @@ export const EditableSpan = React.memo((props: Props) => {
                     autoFocus
                     onBlur={activateViewMode}
                     onChange={onChangeHandler}
-                    type="text"/> :
+                    type="text"
+                    //disabled={props.disabled}
+                /> :
                 <span
-                    onDoubleClick={activateEditMode}>
+                    onDoubleClick={activateEditMode}
+
+                >
                     {props.value}
                     </span>}
         </>

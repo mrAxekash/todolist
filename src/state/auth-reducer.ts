@@ -54,10 +54,12 @@ export const meTC = () => (dispatch: Dispatch) => {
                 dispatch(setIsInitializedAC(true))
             } else {
                 handleServerAppError(res, dispatch)
+                dispatch(setIsInitializedAC(true))
             }
         })
         .catch(err => {
             handleServerNetworkError(err, dispatch)
+            dispatch(setIsInitializedAC(true))
         })
 }
 

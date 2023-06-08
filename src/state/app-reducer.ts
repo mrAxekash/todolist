@@ -8,13 +8,16 @@ export type SetAppStatusACType = ReturnType<typeof setAppStatusAC>
 
 export type SetAppErrorACType = ReturnType<typeof setAppErrorAC>
 
-type ActionType = SetAppStatusACType | SetAppErrorACType
+export type SetIsInitializedAC = ReturnType<typeof setIsInitializedAC>
+
+type ActionType = SetAppStatusACType | SetAppErrorACType | SetIsInitializedAC
 
 
 const initialState = {
     status: 'idle' as RequestStatusType,
-    error: null as null | string
-} as const
+    error: null as null | string,
+    isInitialized: false
+}
 
 export const appReducer = (state: InitialStateType = initialState, action: ActionType): InitialStateType => {
     switch (action.type) {
@@ -23,6 +26,9 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
         }
         case 'APP/SET-ERROR': {
             return {...state, error: action.error}
+        }
+        case 'APP/SET-IS-INITIALIZED': {
+            return {...state, isInitialized: action.initializedValue}
         }
         default:
             return state
@@ -42,6 +48,13 @@ export const setAppErrorAC = (error: string | null) => {
     return {
         type: 'APP/SET-ERROR',
         error
+    } as const
+}
+
+export const setIsInitializedAC = (initializedValue: boolean) => {
+    return {
+        type: 'APP/SET-IS-INITIALIZED',
+        initializedValue
     } as const
 }
 

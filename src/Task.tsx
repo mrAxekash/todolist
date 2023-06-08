@@ -36,7 +36,6 @@ export const Task = (props: Props) => {
         props.changeTaskStatus(props.taskID, e.currentTarget.checked ? 2 : 0, props.todolistID)
     }, [props.changeTaskStatus, props.taskID, props.todolistID, props.task.entityStatus])
 
-    console.log(props.task.entityStatus === 'loading')
 
     return (<div
             key={props.todolistID}

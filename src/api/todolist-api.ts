@@ -17,6 +17,18 @@ export type ResponseType<D = {}> = {
     data: D
 }
 
+export type LoginResponseType<D> = {
+    resultCode: 0
+    messages: [],
+    data: D
+}
+
+export type LoginParamsType = {
+    email: string
+    password: string
+    rememberMe?: boolean
+    captcha?: boolean
+}
 
 
 const instance = axios.create({
@@ -49,6 +61,21 @@ export const todolistsAPI = {
     },
     updateTodolistTitle(newTitle: string, todolistID: string) {
         return instance.put<ResponseType>(`/todo-lists/${todolistID}`, {title: newTitle})
+            .then(res => res.data)
+    }
+}
+
+export const authAPI = {
+    login(data: LoginParamsType) {
+        return instance.post<LoginResponseType<{userId: number}>>('/auth/login', data)
+            .then(res => res.data)
+    },
+    me() {
+        return instance.get<ResponseType<{id: number, email: string, login: string}>>('/auth/me')
+            .then(res => res.data)
+    },
+    logout() {
+        return instance.delete<ResponseType>('/auth/login')
             .then(res => res.data)
     }
 }
